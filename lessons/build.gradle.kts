@@ -2,12 +2,13 @@ plugins {
     alias(libs.plugins.kotlin.jvm) apply false
 }
 
-group = "com.otus.otuskotlin"
-version = "1.0-SNAPSHOT"
+group = "com.otus.otuskotlin.marketplace"
+version = "0.0.1"
 
 repositories {
     mavenCentral()
 }
+
 subprojects {
     repositories {
         mavenCentral()
