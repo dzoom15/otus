@@ -1,4 +1,4 @@
-rootProject.name = "coMatch-project"
+rootProject.name = "weakCon-project"
 
 dependencyResolutionManagement {
     versionCatalogs {
@@ -17,4 +17,6 @@ pluginManagement {
     }
 }
 
-include(":coMatch-tmp")
+include(":weakCon-api-v1")
+include(":weakCon-common")
+include(":weakCon-mapper")
