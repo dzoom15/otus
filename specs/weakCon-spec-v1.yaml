@@ -1,0 +1,691 @@
+openapi: 3.0.3
+info:
+  title: "WeakConnections ${VERSION_APP}"
+  description: This is an app for finding people for interesting events
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/v1
+
+tags:
+  - name: event
+    description: События
+  - name: category
+    description: Категории
+paths:
+  /category/readAll:
+    post:
+      tags:
+        - category
+      summary: Read all categories
+      operationId: categoryRead
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryReadAllRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryReadAllResponse'
+
+  /category/readSubscribed:
+    post:
+      tags:
+        - category
+      summary: Read subscribed categories
+      operationId: categoryReadSubscribed
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryReadSubscribedRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryReadSubscribedResponse'
+
+  /category/subscribe:
+    post:
+      tags:
+        - category
+      summary: Subscribe on category
+      operationId: categorySubscribe
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategorySubscribeRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategorySubscribeResponse'
+
+  /category/unsubscribe:
+    post:
+      tags:
+        - category
+      summary: Unsubscribe from category
+      operationId: categoryUnsubscribe
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryUnsubscribeRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryUnsubscribeResponse'
+
+  /event/create:
+    post:
+      tags:
+        - event
+      summary: Create an event
+      operationId: eventCreate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventCreateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventCreateResponse'
+  /event/read:
+    post:
+      tags:
+        - event
+      summary: Read an event
+      operationId: eventRead
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventReadRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventReadResponse'
+
+  /event/update:
+    post:
+      tags:
+        - event
+      summary: Update an event
+      operationId: eventUpdate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventUpdateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventUpdateResponse'
+  /event/delete:
+    post:
+      tags:
+        - event
+      summary: Delete an event
+      operationId: eventDelete
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventDeleteRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventDeleteResponse'
+  /event/feed:
+    post:
+      tags:
+        - event
+      summary: Feed events
+      operationId: eventFeed
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventsFeedRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsFeedResponse'
+
+  /event/searchOwn:
+    post:
+      tags:
+        - event
+      summary: Search all events that created by user
+      operationId: eventSearchOwn
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventSearchOwnRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventSearchOwnResponse'
+
+components:
+  schemas:
+
+    IRequest:
+      type: object
+      description: Базовый интерфейс для запросов по событиям
+      properties:
+        requestType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+      discriminator:
+        propertyName: requestType
+        mapping:
+          create:     '#/components/schemas/EventCreateRequest'
+          read:       '#/components/schemas/EventReadRequest'
+          update:     '#/components/schemas/EventUpdateRequest'
+          delete:     '#/components/schemas/EventDeleteRequest'
+          feed:       '#/components/schemas/EventsFeedRequest'
+          searchOwn:  '#/components/schemas/EventSearchOwnRequest'
+
+    ICategoryRequest:
+      type: object
+      description: Базовый интерфейс для всех запросов по категориям
+      properties:
+        requestType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+      discriminator:
+        propertyName: requestType
+        mapping:
+          readAll: '#/components/schemas/CategoryReadAllRequest'
+          readSubscribed: '#/components/schemas/CategoryReadSubscribedRequest'
+          subscribe: '#/components/schema/CategorySubscribeRequest'
+          unsubscribe: '#/components/schema/CategoryUnsubscribeRequest'
+
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    IResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов по событиям
+      properties:
+        responseType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+
+      discriminator:
+        propertyName: responseType
+        mapping:
+          create:     '#/components/schemas/EventCreateResponse'
+          read:       '#/components/schemas/EventReadResponse'
+          update:     '#/components/schemas/EventUpdateResponse'
+          delete:     '#/components/schemas/EventDeleteResponse'
+          feed:       '#/components/schemas/EventsFeedResponse'
+          searchOwn:  '#/components/schemas/EventSearchOwnResponse'
+
+    ICategoryResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов по категориям
+      properties:
+        responseType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+
+      discriminator:
+        propertyName: responseType
+        mapping:
+          readAll: '#/components/schemas/CategoryReadAllResponse'
+          readSubscribed: '#/components/schemas/CategoryReadSubscribedResponse'
+          subscribe: '#/components/schema/CategorySubscribeResponse'
+          unsubscribe: '#/components/schema/CategoryUnsubscribeResponse'
+
+
+    UserId:
+      type: string
+      description: Идентификатор пользователя
+    EventId:
+      type: string
+      description: Идентификатор события
+    EventLock:
+      type: string
+      description: Версия оптимистичной блокировки
+    CategoryId:
+      type: string
+      description: Идентификатор категории
+
+    BaseEvent:
+      type: object
+      description: Объект описывает свойства для создания нового события
+      properties:
+        title:
+          type: string
+          description: Название события
+        description:
+          type: string
+          description: Описание события
+        date:
+          type: string
+          format: date-time
+          description: Дата и время события
+        location:
+          type: string
+          description: Место события
+        categoriesOfEvent:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            description: Категория события
+        visibility:
+          $ref: '#/components/schemas/EventVisibility'
+
+    EventVisibility:
+      type: string
+      description: 'Тип видимости объявления. Возможные значения: видит только владелец, только зарегистрированный в системе пользователь, видимо всем'
+      enum:
+        - ownerOnly
+        - registeredOnly
+        - public
+
+    EventCreateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+
+    EventCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/EventRequestDebug'
+        - type: object
+          properties:
+            event:
+              $ref: '#/components/schemas/EventCreateObject'
+
+    EventReadObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/EventId'
+
+    EventReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/EventRequestDebug'
+        - type: object
+          properties:
+            event:
+              $ref: '#/components/schemas/EventReadObject'
+
+    EventUpdateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/EventId'
+            lock:
+              $ref: '#/components/schemas/EventLock'
+
+    EventUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/EventRequestDebug'
+        - type: object
+          properties:
+            event:
+              $ref: '#/components/schemas/EventUpdateObject'
+
+    EventDeleteObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/EventId'
+            lock:
+              $ref: '#/components/schemas/EventLock'
+
+    EventDeleteRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/EventRequestDebug'
+        - type: object
+          properties:
+            event:
+              $ref: '#/components/schemas/EventDeleteObject'
+
+    EventsSearchFilterObject:
+      allOf:
+        - type: object
+          properties:
+            dateFrom:
+              type: string
+              format: date
+              description: Отфильтровать события с указанной даты
+            dateTo:
+              type: string
+              format: date
+              description: Отфильтровать события до указанной даты
+            location:
+              type: string
+              description: Отфильтровать события по локации
+
+    EventsSearchFilter:
+      type: object
+      description: Набор фильтров для поиска событий
+      properties:
+        searchFilter:
+          $ref: '#/components/schemas/EventsSearchFilterObject'
+
+    EventsFeedRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/EventRequestDebug'
+        - type: object
+          properties:
+            userId:
+              $ref: '#/components/schemas/UserId'
+            Filter:
+              $ref: '#/components/schemas/EventsSearchFilter'
+
+    EventSearchOwnFilterObject:
+      allOf:
+        - type: object
+          properties:
+            finished:
+              type: boolean
+              description: Поиск завершенных событий
+            inProgress:
+              type: boolean
+              description: Поиск запланированных событий
+
+    EventSearchOwnFilter:
+      type: object
+      description: Набор фильтров для поиска событий
+      properties:
+        searchFilter:
+          $ref: '#/components/schemas/EventSearchOwnFilterObject'
+
+    EventSearchOwnRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/EventRequestDebug'
+        - type: object
+          properties:
+            userId:
+              $ref: '#/components/schemas/UserId'
+            Filter:
+              $ref: '#/components/schemas/EventSearchOwnFilter'
+
+
+    EventResponseObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          description: Объект, который возвращается в ответе бэкенда
+          properties:
+            id:
+              $ref: '#/components/schemas/EventId'
+            ownerId:
+              $ref: '#/components/schemas/UserId'
+            lock:
+              $ref: '#/components/schemas/EventLock'
+            permissions:
+              type: array
+              uniqueItems: true
+              items:
+                $ref: '#/components/schemas/EventPermissions'
+
+    EventPermissions:
+      type: string
+      description: Доступы для юзера для операций над событием
+      enum:
+        - read
+        - update
+        - delete
+        - makeVisiblePublic
+        - makeVisibleOwn
+        - makeVisibleGroup
+
+    EventResponseSingle:
+      allOf:
+        - type: object
+          description: Ответ с одним объектом события
+          properties:
+            event:
+              $ref: '#/components/schemas/EventResponseObject'
+
+    EventsFeed:
+      allOf:
+        - type: object
+          description: Список найденных событий
+          properties:
+            events:
+              type: array
+              items:
+                $ref: '#/components/schemas/EventResponseObject'
+
+              # Category Requests ======================
+
+    CategoryReadAllRequest:
+      allOf:
+        - $ref: '#/components/schemas/ICategoryRequest'
+        - $ref: '#/components/schemas/EventRequestDebug'
+
+    CategoryReadSubscribedRequest:
+      allOf:
+        - $ref: '#/components/schemas/ICategoryRequest'
+        - $ref: '#/components/schemas/EventRequestDebug'
+        - type: object
+          properties:
+            ownerId:
+              $ref: '#/components/schemas/UserId'
+
+    CategorySubscribeRequest:
+      allOf:
+        - $ref: '#/components/schemas/ICategoryRequest'
+        - $ref: '#/components/schemas/EventRequestDebug'
+        - type: object
+          properties:
+            categoryId:
+              $ref: '#/components/schemas/CategoryId'
+
+    CategoryUnsubscribeRequest:
+      allOf:
+        - $ref: '#/components/schemas/ICategoryRequest'
+        - $ref: '#/components/schemas/EventRequestDebug'
+        - type: object
+          properties:
+            categoryId:
+              $ref: '#/components/schemas/CategoryId'
+
+    EventCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/EventResponseSingle'
+
+    EventReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/EventResponseSingle'
+
+    EventUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/EventResponseSingle'
+
+    EventDeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/EventResponseSingle'
+
+    EventsFeedResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/EventsFeed'
+
+    EventSearchOwnResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/EventsFeed'
+
+    # Category Responses ======================
+
+    CategoryList:
+      allOf:
+        - type: object
+          description: Список найденных категорий
+          properties:
+            categories:
+              type: array
+              items:
+                $ref: '#/components/schemas/CategoryResponseSingle'
+
+    CategoryResponseSingle:
+      allOf:
+        - type: object
+          description: Ответ с одним объектом категории
+          properties:
+            category:
+              type: string
+
+    CategorySubscribeResponse:
+      allOf:
+        - $ref: '#/components/schemas/ICategoryResponse'
+        - $ref: '#/components/schemas/CategoryResponseSingle'
+
+    CategoryUnsubscribeResponse:
+      allOf:
+        - $ref: '#/components/schemas/ICategoryResponse'
+        - $ref: '#/components/schemas/CategoryResponseSingle'
+
+    CategoryReadAllResponse:
+      allOf:
+        - $ref: '#/components/schemas/ICategoryResponse'
+        - $ref: '#/components/schemas/CategoryList'
+    CategoryReadSubscribedResponse:
+      allOf:
+        - $ref: '#/components/schemas/ICategoryResponse'
+        - $ref: '#/components/schemas/CategoryList'
+
+
+    # STUBS ======================
+    EventRequestDebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    EventRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/EventDebug'
+
+    EventDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/EventRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/EventRequestDebugStubs'
+
+    EventRequestDebugStubs:
+      type: string
+      description: Перечисления всех стабов
+      enum:
+        - success
+        - notFound
+        - badId
+        - badTitle
+        - badDescription
+        - badVisibility
+        - cannotDelete
+        - badSearchFilter
